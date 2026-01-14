@@ -7,13 +7,11 @@ export default function Home() {
     <main className="min-h-screen bg-zinc-950">
       <Hero />
 
-      <div className="border-t border-zinc-800" />
+      <Calculator />
+
+      <div className="border-t border-zinc-800 mt-8" />
 
       <Explainer />
-
-      <div className="border-t border-zinc-800" />
-
-      <Calculator />
 
       {/* Footer */}
       <footer className="py-12 px-4 text-center border-t border-zinc-800">

@@ -2,10 +2,10 @@ export function Explainer() {
   return (
     <section className="py-12 px-4 max-w-3xl mx-auto">
       <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center">
-        The One Thing You Need to Know
+        How Does This Work?
       </h2>
       <p className="text-gray-400 text-center mb-8">
-        Bilt 2.0 changed everything. Here&apos;s how it works now.
+        The short version of Bilt 2.0.
       </p>
 
       {/* The core mechanic */}
