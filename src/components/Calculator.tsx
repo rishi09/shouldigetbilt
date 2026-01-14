@@ -12,6 +12,13 @@ const DEFAULT_INPUTS: UserInputs = {
   other: 500,
 };
 
+const SPENDING_CATEGORIES = [
+  { key: "dining" as const, label: "Dining", icon: "🍴", max: 2000 },
+  { key: "groceries" as const, label: "Groceries", icon: "🛒", max: 1500 },
+  { key: "travel" as const, label: "Travel", icon: "✈️", max: 1500 },
+  { key: "other" as const, label: "Other", icon: "🏷️", max: 2000 },
+];
+
 export function Calculator() {
   const [inputs, setInputs] = useState<UserInputs>(DEFAULT_INPUTS);
   const [copied, setCopied] = useState(false);
@@ -40,85 +47,73 @@ export function Calculator() {
   };
 
   return (
-    <section className="px-3 pb-3 lg:px-4 lg:pb-4 max-w-5xl mx-auto flex-1 flex flex-col lg:block">
-      {/* MOBILE LAYOUT: Full screen, everything visible */}
-      <div className="lg:hidden flex flex-col flex-1 justify-between gap-2">
-        {/* 1. INPUTS FIRST */}
-        <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
-          {/* Rent input */}
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-300 text-sm font-medium">Rent</span>
-            <div className="relative w-28">
-              <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
-              <input
-                type="number"
-                min="0"
-                step="100"
-                value={inputs.rent || ""}
-                onChange={(e) => updateInput("rent")(Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 pl-5 text-white text-sm text-right focus:outline-none focus:border-blue-500"
-              />
-            </div>
-          </div>
-
-          {/* Spending inputs - 2x2 grid, ultra compact */}
-          <div className="border-t border-zinc-700 pt-2">
-            <p className="text-gray-500 text-xs mb-1.5">Card spending:</p>
-            <div className="grid grid-cols-4 gap-1.5">
-              {(["dining", "groceries", "travel", "other"] as const).map((key) => (
-                <div key={key} className="text-center">
-                  <label className="text-gray-500 text-[10px] block mb-0.5 capitalize">{key}</label>
-                  <div className="relative">
-                    <span className="absolute left-1 top-1/2 -translate-y-1/2 text-gray-600 text-[10px]">$</span>
-                    <input
-                      type="number"
-                      min="0"
-                      step="50"
-                      value={inputs[key] || ""}
-                      onChange={(e) => updateInput(key)(Math.max(0, parseInt(e.target.value) || 0))}
-                      className="w-full bg-zinc-800 border border-zinc-700 rounded px-1 py-1 pl-3 text-white text-xs text-right focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+    <section className="px-4 pb-4 lg:px-4 lg:pb-4 max-w-5xl mx-auto flex-1 flex flex-col lg:block">
+      {/* MOBILE LAYOUT: Full screen design */}
+      <div className="lg:hidden flex flex-col flex-1">
+        {/* Rent Input - Large white box */}
+        <div className="mb-4">
+          <label className="block text-gray-400 text-sm mb-2">Rent</label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-800 text-2xl font-bold">$</span>
+            <input
+              type="number"
+              min="0"
+              step="100"
+              value={inputs.rent || ""}
+              onChange={(e) => updateInput("rent")(Math.max(0, parseInt(e.target.value) || 0))}
+              className="w-full bg-white border-0 rounded-lg px-4 py-4 pl-10 text-gray-900 text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
           </div>
         </div>
 
-        {/* 2. ANSWER SECOND */}
-        <div className={`rounded-lg p-3 text-center ${
-          result.canCoverFullRent
-            ? "bg-green-900/30 border-2 border-green-500/50"
-            : "bg-yellow-900/20 border-2 border-yellow-500/50"
-        }`}>
-          <div className="flex items-center justify-between">
-            <div className="text-left">
-              <div className={`text-3xl font-bold ${
-                result.canCoverFullRent ? "text-green-400" : "text-yellow-400"
-              }`}>
-                {result.canCoverFullRent ? "YES" : "NOT YET"}
+        {/* Card Spending - Sliders */}
+        <div className="flex-1">
+          <label className="block text-gray-400 text-sm mb-3">Card spending</label>
+          <div className="space-y-4">
+            {SPENDING_CATEGORIES.map((category) => (
+              <div key={category.key} className="flex items-center gap-3">
+                <span className="text-xl w-6">{category.icon}</span>
+                <span className="text-white text-sm w-20">{category.label}</span>
+                <input
+                  type="range"
+                  min="0"
+                  max={category.max}
+                  step="50"
+                  value={inputs[category.key]}
+                  onChange={(e) => updateInput(category.key)(parseInt(e.target.value))}
+                  className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-white"
+                />
+                <span className="text-white text-sm w-16 text-right">${inputs[category.key]}</span>
               </div>
-              <p className="text-gray-400 text-xs">
-                {result.canCoverFullRent ? (
-                  "Full rent points, no fees"
-                ) : (
-                  <>Need ${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()} more</>
-                )}
-              </p>
+            ))}
+          </div>
+        </div>
+
+        {/* Results Card */}
+        <div className={`rounded-xl p-4 mt-4 ${
+          result.canCoverFullRent
+            ? "bg-green-600"
+            : "bg-yellow-600"
+        }`}>
+          <div className="flex justify-between items-start mb-2">
+            <div>
+              <div className="text-white/80 text-xs uppercase tracking-wide">Estimated Annual Points:</div>
+              <div className="text-white text-2xl font-bold">{result.blue.annualPoints.toLocaleString()} pts</div>
             </div>
             <div className="text-right">
-              <div className="text-gray-500 text-[10px]">Coverage</div>
-              <div className={`text-xl font-bold ${result.canCoverFullRent ? "text-green-400" : "text-yellow-400"}`}>
-                {Math.round(result.coveragePercent)}%
-              </div>
+              <div className="text-white/80 text-xs uppercase tracking-wide">Value:</div>
+              <div className="text-white text-2xl font-bold">~${result.blue.netAnnualValue}</div>
             </div>
+          </div>
+          <div className="text-white text-lg font-semibold">
+            Rent Coverage: {Math.round(result.coveragePercent)}%
           </div>
         </div>
 
-        {/* 3. SHARE THIRD */}
+        {/* Share Button */}
         <button
           onClick={handleShare}
-          className="w-full py-3 rounded-lg border border-zinc-700 bg-zinc-800 active:bg-zinc-700 text-gray-300 text-sm"
+          className="w-full py-4 rounded-xl bg-zinc-800 active:bg-zinc-700 text-white text-base font-medium mt-4"
         >
           {copied ? "Copied!" : "Share"}
         </button>
