@@ -4,34 +4,47 @@ export function Explainer() {
       <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center">
         How Does This Work?
       </h2>
-      <p className="text-gray-400 text-center mb-8">
-        The short version of Bilt 2.0.
+      <p className="text-gray-500 text-center mb-8">
+        The short version of Bilt 2.0
       </p>
 
-      {/* The core mechanic */}
+      {/* Visual Formula */}
       <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800 mb-6">
-        <h3 className="font-semibold text-lg mb-4 text-center">The New Rule</h3>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 text-center">
+          <div className="bg-zinc-800 rounded-lg px-4 py-3">
+            <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">Card Spend</div>
+            <div className="text-white font-semibold">$X/mo</div>
+          </div>
 
-        <div className="space-y-3 text-center">
-          <p className="text-gray-300">
-            To earn full points on your rent (no fees), you need{" "}
-            <span className="text-yellow-400 font-semibold">&quot;Bilt Cash.&quot;</span>
-          </p>
+          <span className="text-gray-500 text-xl">×</span>
 
-          <p className="text-gray-300">
-            You earn Bilt Cash at{" "}
-            <span className="text-green-400 font-semibold">4%</span>{" "}
-            of everything you spend on the card.
-          </p>
+          <div className="bg-zinc-800 rounded-lg px-4 py-3">
+            <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">Rate</div>
+            <div className="text-green-400 font-semibold">4%</div>
+          </div>
 
-          <p className="text-gray-400 text-sm">
-            Here&apos;s how much you need to spend:
-          </p>
+          <span className="text-gray-500 text-xl">=</span>
+
+          <div className="bg-yellow-900/30 border border-yellow-500/30 rounded-lg px-4 py-3">
+            <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">Bilt Cash</div>
+            <div className="text-yellow-400 font-semibold">$Y/mo</div>
+          </div>
+
+          <span className="text-gray-500 text-xl">→</span>
+
+          <div className="bg-green-900/30 border border-green-500/30 rounded-lg px-4 py-3">
+            <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">Unlocks</div>
+            <div className="text-green-400 font-semibold">Rent Points</div>
+          </div>
         </div>
+
+        <p className="text-gray-500 text-sm text-center mt-4">
+          You need $30 Bilt Cash per $1,000 rent to earn full points fee-free.
+        </p>
       </div>
 
-      {/* Example table */}
-      <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800 mb-6">
+      {/* Example table with zebra striping */}
+      <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800">
         <h3 className="font-semibold text-lg mb-4 text-center">Examples</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -43,22 +56,22 @@ export function Explainer() {
               </tr>
             </thead>
             <tbody className="text-gray-300">
-              <tr className="border-b border-zinc-800">
-                <td className="py-3">$1,500</td>
+              <tr className="bg-zinc-800/50">
+                <td className="py-3 rounded-l">$1,500</td>
                 <td className="py-3 text-right text-yellow-400">$45</td>
-                <td className="py-3 text-right text-white font-medium">$1,125/mo</td>
+                <td className="py-3 text-right text-white font-medium rounded-r">$1,125/mo</td>
               </tr>
-              <tr className="border-b border-zinc-800">
+              <tr className="bg-transparent">
                 <td className="py-3">$2,000</td>
                 <td className="py-3 text-right text-yellow-400">$60</td>
                 <td className="py-3 text-right text-white font-medium">$1,500/mo</td>
               </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-3">$2,500</td>
+              <tr className="bg-zinc-800/50">
+                <td className="py-3 rounded-l">$2,500</td>
                 <td className="py-3 text-right text-yellow-400">$75</td>
-                <td className="py-3 text-right text-white font-medium">$1,875/mo</td>
+                <td className="py-3 text-right text-white font-medium rounded-r">$1,875/mo</td>
               </tr>
-              <tr>
+              <tr className="bg-transparent">
                 <td className="py-3">$3,000</td>
                 <td className="py-3 text-right text-yellow-400">$90</td>
                 <td className="py-3 text-right text-white font-medium">$2,250/mo</td>
