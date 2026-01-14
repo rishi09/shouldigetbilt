@@ -47,6 +47,11 @@ export function Calculator() {
     }
   };
 
+  // Determine slider style based on coverage state
+  const sliderClassName = `flex-1 h-2 rounded-lg appearance-none cursor-pointer slider-track ${
+    result.canCoverFullRent ? "" : "warning"
+  }`;
+
   return (
     <section className="px-4 pb-4 lg:px-4 lg:pb-4 max-w-5xl mx-auto flex-1 flex flex-col lg:block">
       {/* MOBILE LAYOUT: Full screen design */}
@@ -62,7 +67,7 @@ export function Calculator() {
               step="100"
               value={inputs.rent || ""}
               onChange={(e) => updateInput("rent")(Math.max(0, parseInt(e.target.value) || 0))}
-              className="flex-1 bg-transparent text-white text-4xl font-bold focus:outline-none"
+              className="flex-1 bg-transparent text-white text-4xl font-bold focus:outline-none tabular-nums"
               style={{ width: "100%" }}
             />
           </div>
@@ -87,9 +92,9 @@ export function Calculator() {
                   onMouseUp={() => setActiveSlider(null)}
                   onTouchStart={() => setActiveSlider(category.key)}
                   onTouchEnd={() => setActiveSlider(null)}
-                  className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-white"
+                  className={sliderClassName}
                 />
-                <span className={`text-sm w-16 text-right font-medium transition-colors ${
+                <span className={`text-sm w-16 text-right font-medium transition-colors tabular-nums ${
                   activeSlider === category.key ? "text-green-400 font-bold" : "text-white"
                 }`}>
                   ${inputs[category.key]}
@@ -108,36 +113,36 @@ export function Calculator() {
           {/* Value is the hero stat */}
           <div className="text-center mb-3">
             <div className="text-white/70 text-xs uppercase tracking-wide mb-1">Estimated Annual Value</div>
-            <div className="text-white text-5xl font-bold">~${result.blue.netAnnualValue}</div>
-            <div className="text-white/70 text-sm mt-1">{result.blue.annualPoints.toLocaleString()} pts/year</div>
+            <div className="text-white text-5xl font-bold tabular-nums">~${result.blue.netAnnualValue}</div>
+            <div className="text-white/70 text-sm mt-1 tabular-nums">{result.blue.annualPoints.toLocaleString()} pts/year</div>
           </div>
 
-          {/* Rent Coverage with contextual color */}
-          <div className={`text-center pt-3 border-t ${
-            result.canCoverFullRent ? "border-white/20" : "border-white/20"
-          }`}>
-            <span className="text-white/70 text-sm">Rent Coverage: </span>
-            <span className={`text-lg font-bold ${
-              result.canCoverFullRent
-                ? "text-white"
-                : result.coveragePercent >= 50
-                  ? "text-yellow-200"
-                  : "text-red-200"
-            }`}>
-              {Math.round(result.coveragePercent)}%
-            </span>
-            {!result.canCoverFullRent && (
-              <div className="text-white/60 text-xs mt-1">
-                Need ${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()}/mo more
+          {/* Rent Coverage with contextual color and win state */}
+          <div className="text-center pt-3 border-t border-white/20">
+            {result.canCoverFullRent ? (
+              <div className="text-white text-lg font-bold">
+                ✓ You&apos;re fully covered!
               </div>
+            ) : (
+              <>
+                <span className="text-white/70 text-sm">Rent Coverage: </span>
+                <span className={`text-lg font-bold tabular-nums ${
+                  result.coveragePercent >= 50 ? "text-yellow-200" : "text-red-200"
+                }`}>
+                  {Math.round(result.coveragePercent)}%
+                </span>
+                <div className="text-white/60 text-xs mt-1 tabular-nums">
+                  Need ${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()}/mo more
+                </div>
+              </>
             )}
           </div>
         </div>
 
-        {/* Share Button - Ghost style outside card */}
+        {/* Share Button - Visible ghost style */}
         <button
           onClick={handleShare}
-          className="w-full py-3 rounded-xl border border-gray-600 bg-transparent hover:bg-zinc-800 active:bg-zinc-700 text-gray-300 text-sm font-medium mt-4 transition-colors"
+          className="w-full py-3 rounded-xl border border-gray-500 bg-white/5 hover:bg-white/10 active:bg-white/15 text-gray-200 text-sm font-medium mt-4 transition-colors"
         >
           {copied ? "Link Copied!" : "Share Calculator"}
         </button>
@@ -159,7 +164,7 @@ export function Calculator() {
                   step="100"
                   value={inputs.rent || ""}
                   onChange={(e) => updateInput("rent")(Math.max(0, parseInt(e.target.value) || 0))}
-                  className="flex-1 bg-transparent text-white text-3xl font-bold focus:outline-none"
+                  className="flex-1 bg-transparent text-white text-3xl font-bold focus:outline-none tabular-nums"
                 />
               </div>
             </div>
@@ -178,7 +183,7 @@ export function Calculator() {
                         step="100"
                         value={inputs[key] || ""}
                         onChange={(e) => updateInput(key)(Math.max(0, parseInt(e.target.value) || 0))}
-                        className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-2 pl-6 text-white text-sm focus:outline-none focus:border-green-500"
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-2 pl-6 text-white text-sm focus:outline-none focus:border-green-500 tabular-nums"
                       />
                     </div>
                   </div>
@@ -197,16 +202,16 @@ export function Calculator() {
           }`}>
             {/* Value hero */}
             <div className="text-gray-400 text-sm uppercase tracking-wide mb-2">Estimated Annual Value</div>
-            <div className={`text-6xl font-bold mb-2 ${
+            <div className={`text-6xl font-bold mb-2 tabular-nums ${
               result.canCoverFullRent ? "text-green-400" : "text-amber-400"
             }`}>
               ~${result.blue.netAnnualValue}
             </div>
-            <div className="text-gray-400 text-lg mb-4">
+            <div className="text-gray-400 text-lg mb-4 tabular-nums">
               {result.blue.annualPoints.toLocaleString()} pts/year
             </div>
 
-            {/* Coverage status */}
+            {/* Coverage status with win state */}
             <div className={`text-lg ${
               result.canCoverFullRent
                 ? "text-green-400"
@@ -215,9 +220,9 @@ export function Calculator() {
                   : "text-red-400"
             }`}>
               {result.canCoverFullRent ? (
-                "✓ Full rent points, no fees"
+                "✓ You're fully covered!"
               ) : (
-                <>Need ${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()}/mo more spending</>
+                <span className="tabular-nums">Need ${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()}/mo more spending</span>
               )}
             </div>
           </div>
@@ -226,11 +231,11 @@ export function Calculator() {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <div className="text-gray-500">Need to spend</div>
-                <div className="text-white font-medium text-lg">${Math.round(result.spendingNeededFor100).toLocaleString()}/mo</div>
+                <div className="text-white font-medium text-lg tabular-nums">${Math.round(result.spendingNeededFor100).toLocaleString()}/mo</div>
               </div>
               <div>
                 <div className="text-gray-500">You&apos;re spending</div>
-                <div className={`font-medium text-lg ${result.canCoverFullRent ? "text-green-400" : "text-white"}`}>
+                <div className={`font-medium text-lg tabular-nums ${result.canCoverFullRent ? "text-green-400" : "text-white"}`}>
                   ${result.totalSpending.toLocaleString()}/mo
                 </div>
               </div>
@@ -238,7 +243,7 @@ export function Calculator() {
             <div className="mt-4">
               <div className="flex justify-between text-xs text-gray-500 mb-1">
                 <span>Coverage</span>
-                <span className={result.canCoverFullRent ? "text-green-400" : result.coveragePercent >= 50 ? "text-amber-400" : "text-red-400"}>
+                <span className={`tabular-nums ${result.canCoverFullRent ? "text-green-400" : result.coveragePercent >= 50 ? "text-amber-400" : "text-red-400"}`}>
                   {Math.round(result.coveragePercent)}%
                 </span>
               </div>
@@ -259,7 +264,7 @@ export function Calculator() {
 
           <button
             onClick={handleShare}
-            className="w-full py-3 rounded-lg border border-zinc-600 bg-transparent hover:bg-zinc-800 transition-colors text-gray-300 text-sm font-medium"
+            className="w-full py-3 rounded-lg border border-zinc-500 bg-white/5 hover:bg-white/10 transition-colors text-gray-200 text-sm font-medium"
           >
             {copied ? "Link Copied!" : "Share Calculator"}
           </button>

@@ -12,3 +12,56 @@ body {
   background: var(--background);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
+
+/* Custom slider styling */
+.slider-track {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.slider-track::-webkit-slider-runnable-track {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  height: 8px;
+}
+
+.slider-track::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: white;
+  margin-top: -6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Warning state - orange thumb */
+.slider-track.warning::-webkit-slider-thumb {
+  background: #f59e0b; /* amber-500 */
+}
+
+/* Firefox */
+.slider-track::-moz-range-track {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  height: 8px;
+}
+
+.slider-track::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Warning state - orange thumb (Firefox) */
+.slider-track.warning::-moz-range-thumb {
+  background: #f59e0b; /* amber-500 */
+}
