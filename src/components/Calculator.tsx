@@ -40,9 +40,9 @@ export function Calculator() {
   };
 
   return (
-    <section className="px-3 pb-3 lg:px-4 lg:pb-4 max-w-5xl mx-auto">
-      {/* MOBILE LAYOUT: Ultra-compact, everything visible */}
-      <div className="lg:hidden space-y-2">
+    <section className="px-3 pb-3 lg:px-4 lg:pb-4 max-w-5xl mx-auto flex-1 flex flex-col lg:block">
+      {/* MOBILE LAYOUT: Full screen, everything visible */}
+      <div className="lg:hidden flex flex-col flex-1 justify-between gap-2">
         {/* 1. INPUTS FIRST */}
         <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
           {/* Rent input */}
@@ -118,7 +118,7 @@ export function Calculator() {
         {/* 3. SHARE THIRD */}
         <button
           onClick={handleShare}
-          className="w-full py-2 rounded-lg border border-zinc-700 bg-zinc-800 active:bg-zinc-700 text-gray-300 text-sm"
+          className="w-full py-3 rounded-lg border border-zinc-700 bg-zinc-800 active:bg-zinc-700 text-gray-300 text-sm"
         >
           {copied ? "Copied!" : "Share"}
         </button>
