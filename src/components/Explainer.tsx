@@ -67,23 +67,6 @@ export function Explainer() {
           </table>
         </div>
       </div>
-
-      {/* Why bother */}
-      <div className="bg-zinc-900 rounded-lg p-6 border border-green-900/50">
-        <div className="flex items-start gap-3">
-          <span className="text-green-500 text-xl">✓</span>
-          <div>
-            <h3 className="font-semibold text-lg mb-2">Why bother?</h3>
-            <p className="text-gray-400">
-              Most credit cards give you{" "}
-              <span className="text-gray-300 font-medium">0 points on rent</span>.
-              If you hit the threshold, Bilt gives you{" "}
-              <span className="text-green-400 font-medium">1 point per dollar</span>{" "}
-              — that&apos;s real value on your biggest monthly expense.
-            </p>
-          </div>
-        </div>
-      </div>
     </section>
   );
 }
