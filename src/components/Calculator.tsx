@@ -19,15 +19,41 @@ const SPENDING_CATEGORIES = [
   { key: "other" as const, label: "Other", icon: "🏷️", max: 2000 },
 ];
 
+// Format number with commas
+const formatWithCommas = (value: number): string => {
+  return value.toLocaleString();
+};
+
+// Parse comma-formatted string to number
+const parseFromCommas = (value: string): number => {
+  return parseInt(value.replace(/,/g, "")) || 0;
+};
+
 export function Calculator() {
   const [inputs, setInputs] = useState<UserInputs>(DEFAULT_INPUTS);
   const [activeSlider, setActiveSlider] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [rentInputValue, setRentInputValue] = useState(formatWithCommas(DEFAULT_INPUTS.rent));
 
   const result = useMemo(() => calculateBiltValue(inputs), [inputs]);
 
   const updateInput = (key: keyof UserInputs) => (value: number) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleRentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/,/g, "");
+    // Only allow digits
+    if (/^\d*$/.test(rawValue)) {
+      const numValue = parseInt(rawValue) || 0;
+      setRentInputValue(rawValue ? formatWithCommas(numValue) : "");
+      updateInput("rent")(numValue);
+    }
+  };
+
+  const handleRentBlur = () => {
+    // Re-format on blur
+    setRentInputValue(inputs.rent ? formatWithCommas(inputs.rent) : "");
   };
 
   const handleShare = async () => {
@@ -58,15 +84,15 @@ export function Calculator() {
       <div className="lg:hidden flex flex-col flex-1">
         {/* Rent Input - Fintech underline style */}
         <div className="mb-6">
-          <label className="block text-gray-500 text-xs uppercase tracking-wide mb-3">Monthly Rent</label>
+          <label className="block text-gray-500 text-xs uppercase tracking-widest mb-2">Monthly Rent</label>
           <div className="flex items-baseline border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
             <span className="text-gray-500 text-2xl mr-1" style={{ transform: 'translateY(2px)' }}>$</span>
             <input
-              type="number"
-              min="0"
-              step="100"
-              value={inputs.rent || ""}
-              onChange={(e) => updateInput("rent")(Math.max(0, parseInt(e.target.value) || 0))}
+              type="text"
+              inputMode="numeric"
+              value={rentInputValue}
+              onChange={handleRentChange}
+              onBlur={handleRentBlur}
               className="flex-1 bg-transparent text-white text-4xl font-bold focus:outline-none tabular-nums leading-none"
               style={{ width: "100%" }}
             />
@@ -155,15 +181,15 @@ export function Calculator() {
           <h2 className="text-lg font-semibold mb-4">Your Numbers</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-gray-500 text-xs uppercase tracking-wide mb-3">Monthly Rent</label>
+              <label className="block text-gray-500 text-xs uppercase tracking-widest mb-2">Monthly Rent</label>
               <div className="flex items-baseline border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
                 <span className="text-gray-500 text-xl mr-1" style={{ transform: 'translateY(2px)' }}>$</span>
                 <input
-                  type="number"
-                  min="0"
-                  step="100"
-                  value={inputs.rent || ""}
-                  onChange={(e) => updateInput("rent")(Math.max(0, parseInt(e.target.value) || 0))}
+                  type="text"
+                  inputMode="numeric"
+                  value={rentInputValue}
+                  onChange={handleRentChange}
+                  onBlur={handleRentBlur}
                   className="flex-1 bg-transparent text-white text-3xl font-bold focus:outline-none tabular-nums leading-none"
                 />
               </div>
