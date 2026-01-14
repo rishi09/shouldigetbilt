@@ -11,13 +11,28 @@ export function Explainer() {
         <p className="text-gray-300 text-center mb-4">
           Bilt now uses a <span className="text-yellow-400 font-semibold">two-tier reward system</span>.
         </p>
-        <p className="text-gray-400 text-center text-sm mb-4">
-          To earn 1X points on your rent (fee-free), you must first spend real, non-rent money on the card.
-          That spending earns <span className="text-green-400 font-semibold">4% Bilt Cash</span>, which unlocks your rent rewards.
-        </p>
-        <div className="bg-zinc-800 rounded-lg p-4 text-center">
+
+        <div className="space-y-3 text-gray-400 text-sm">
+          <div className="flex items-start gap-3">
+            <span className="text-red-400 font-bold">1.</span>
+            <p>Bilt charges a <span className="text-red-400 font-semibold">3% fee</span> when you pay rent with the card.</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-green-400 font-bold">2.</span>
+            <p>Your other card spending earns <span className="text-green-400 font-semibold">4% Bilt Cash</span>, which covers that fee.</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-yellow-400 font-bold">3.</span>
+            <p>If your Bilt Cash covers the full 3% fee, you pay <span className="text-white font-semibold">$0 out of pocket</span> and earn 1X points on rent.</p>
+          </div>
+        </div>
+
+        <div className="bg-zinc-800 rounded-lg p-4 text-center mt-4">
           <p className="text-white font-medium">
-            You need <span className="text-yellow-400">$30 Bilt Cash</span> per <span className="text-white">$1,000 rent</span> to earn full points fee-free.
+            You need <span className="text-yellow-400">$30 Bilt Cash</span> per <span className="text-white">$1,000 rent</span> to cover the fee and earn points.
+          </p>
+          <p className="text-gray-500 text-xs mt-2">
+            All calculations on this site are net of the 3% fee.
           </p>
         </div>
       </div>
@@ -47,6 +62,13 @@ export function Explainer() {
 
           <span className="text-gray-500 text-xl">→</span>
 
+          <div className="bg-red-900/20 border border-red-500/30 rounded-lg px-4 py-3">
+            <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">Covers</div>
+            <div className="text-red-400 font-semibold">3% Fee</div>
+          </div>
+
+          <span className="text-gray-500 text-xl">→</span>
+
           <div className="bg-green-900/30 border border-green-500/30 rounded-lg px-4 py-3">
             <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">Unlocks</div>
             <div className="text-green-400 font-semibold">Rent Points</div>
@@ -56,35 +78,36 @@ export function Explainer() {
 
       {/* Example table with zebra striping */}
       <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800">
-        <h3 className="font-semibold text-lg mb-4 text-center">Examples</h3>
+        <h3 className="font-semibold text-lg mb-2 text-center">Examples</h3>
+        <p className="text-gray-500 text-xs text-center mb-4">Spending required to pay $0 in fees</p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-gray-500 border-b border-zinc-700">
                 <th className="py-2 text-left">Your Rent</th>
-                <th className="py-2 text-right">Bilt Cash Needed</th>
-                <th className="py-2 text-right">Card Spending Required</th>
+                <th className="py-2 text-right">3% Fee</th>
+                <th className="py-2 text-right">Spending to Cover</th>
               </tr>
             </thead>
             <tbody className="text-gray-300">
               <tr className="bg-white/5">
                 <td className="py-3 pl-2 rounded-l">$1,500</td>
-                <td className="py-3 text-right text-yellow-400">$45</td>
+                <td className="py-3 text-right text-red-400">$45</td>
                 <td className="py-3 text-right text-white font-medium pr-2 rounded-r">$1,125/mo</td>
               </tr>
               <tr className="bg-transparent">
                 <td className="py-3 pl-2">$2,000</td>
-                <td className="py-3 text-right text-yellow-400">$60</td>
+                <td className="py-3 text-right text-red-400">$60</td>
                 <td className="py-3 text-right text-white font-medium pr-2">$1,500/mo</td>
               </tr>
               <tr className="bg-white/5">
                 <td className="py-3 pl-2 rounded-l">$2,500</td>
-                <td className="py-3 text-right text-yellow-400">$75</td>
+                <td className="py-3 text-right text-red-400">$75</td>
                 <td className="py-3 text-right text-white font-medium pr-2 rounded-r">$1,875/mo</td>
               </tr>
               <tr className="bg-transparent">
                 <td className="py-3 pl-2">$3,000</td>
-                <td className="py-3 text-right text-yellow-400">$90</td>
+                <td className="py-3 text-right text-red-400">$90</td>
                 <td className="py-3 text-right text-white font-medium pr-2">$2,250/mo</td>
               </tr>
             </tbody>
