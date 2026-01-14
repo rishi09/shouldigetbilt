@@ -12,33 +12,6 @@ const DEFAULT_INPUTS: UserInputs = {
   other: 500,
 };
 
-function CompactInput({
-  label,
-  value,
-  onChange
-}: {
-  label: string;
-  value: number;
-  onChange: (v: number) => void;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-2">
-      <label className="text-gray-400 text-sm">{label}</label>
-      <div className="relative w-24">
-        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
-        <input
-          type="number"
-          min="0"
-          step="100"
-          value={value || ""}
-          onChange={(e) => onChange(Math.max(0, parseInt(e.target.value) || 0))}
-          className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1.5 pl-5 text-white text-sm text-right focus:outline-none focus:border-blue-500"
-        />
-      </div>
-    </div>
-  );
-}
-
 export function Calculator() {
   const [inputs, setInputs] = useState<UserInputs>(DEFAULT_INPUTS);
   const [copied, setCopied] = useState(false);
@@ -67,63 +40,87 @@ export function Calculator() {
   };
 
   return (
-    <section className="px-4 pb-4 max-w-5xl mx-auto">
-      {/* MOBILE LAYOUT: Stacked, compact */}
-      <div className="lg:hidden space-y-3">
-        {/* Compact inputs */}
-        <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
-          <div className="space-y-2">
-            <CompactInput label="Monthly Rent" value={inputs.rent} onChange={updateInput("rent")} />
+    <section className="px-3 pb-3 lg:px-4 lg:pb-4 max-w-5xl mx-auto">
+      {/* MOBILE LAYOUT: Ultra-compact, everything visible */}
+      <div className="lg:hidden space-y-2">
+        {/* 1. INPUTS FIRST */}
+        <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
+          {/* Rent input */}
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-gray-300 text-sm font-medium">Rent</span>
+            <div className="relative w-28">
+              <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+              <input
+                type="number"
+                min="0"
+                step="100"
+                value={inputs.rent || ""}
+                onChange={(e) => updateInput("rent")(Math.max(0, parseInt(e.target.value) || 0))}
+                className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 pl-5 text-white text-sm text-right focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
 
-            <div className="border-t border-zinc-700 pt-2 mt-2">
-              <p className="text-gray-500 text-xs mb-2">Monthly spending on card:</p>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                <CompactInput label="Dining" value={inputs.dining} onChange={updateInput("dining")} />
-                <CompactInput label="Groceries" value={inputs.groceries} onChange={updateInput("groceries")} />
-                <CompactInput label="Travel" value={inputs.travel} onChange={updateInput("travel")} />
-                <CompactInput label="Other" value={inputs.other} onChange={updateInput("other")} />
+          {/* Spending inputs - 2x2 grid, ultra compact */}
+          <div className="border-t border-zinc-700 pt-2">
+            <p className="text-gray-500 text-xs mb-1.5">Card spending:</p>
+            <div className="grid grid-cols-4 gap-1.5">
+              {(["dining", "groceries", "travel", "other"] as const).map((key) => (
+                <div key={key} className="text-center">
+                  <label className="text-gray-500 text-[10px] block mb-0.5 capitalize">{key}</label>
+                  <div className="relative">
+                    <span className="absolute left-1 top-1/2 -translate-y-1/2 text-gray-600 text-[10px]">$</span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="50"
+                      value={inputs[key] || ""}
+                      onChange={(e) => updateInput(key)(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="w-full bg-zinc-800 border border-zinc-700 rounded px-1 py-1 pl-3 text-white text-xs text-right focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 2. ANSWER SECOND */}
+        <div className={`rounded-lg p-3 text-center ${
+          result.canCoverFullRent
+            ? "bg-green-900/30 border-2 border-green-500/50"
+            : "bg-yellow-900/20 border-2 border-yellow-500/50"
+        }`}>
+          <div className="flex items-center justify-between">
+            <div className="text-left">
+              <div className={`text-3xl font-bold ${
+                result.canCoverFullRent ? "text-green-400" : "text-yellow-400"
+              }`}>
+                {result.canCoverFullRent ? "YES" : "NOT YET"}
+              </div>
+              <p className="text-gray-400 text-xs">
+                {result.canCoverFullRent ? (
+                  "Full rent points, no fees"
+                ) : (
+                  <>Need ${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()} more</>
+                )}
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="text-gray-500 text-[10px]">Coverage</div>
+              <div className={`text-xl font-bold ${result.canCoverFullRent ? "text-green-400" : "text-yellow-400"}`}>
+                {Math.round(result.coveragePercent)}%
               </div>
             </div>
           </div>
         </div>
 
-        {/* THE ANSWER - Compact */}
-        <div className={`rounded-lg p-4 text-center ${
-          result.canCoverFullRent
-            ? "bg-green-900/30 border-2 border-green-500/50"
-            : "bg-yellow-900/20 border-2 border-yellow-500/50"
-        }`}>
-          <div className={`text-4xl font-bold mb-1 ${
-            result.canCoverFullRent ? "text-green-400" : "text-yellow-400"
-          }`}>
-            {result.canCoverFullRent ? "YES" : "NOT YET"}
-          </div>
-          <p className="text-gray-300 text-sm">
-            {result.canCoverFullRent ? (
-              "Full points on rent, no fees."
-            ) : (
-              <>Need <span className="text-white font-semibold">${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()}</span> more/mo</>
-            )}
-          </p>
-
-          {/* Progress bar inline */}
-          <div className="mt-2 flex items-center gap-2">
-            <div className="flex-1 bg-zinc-700 rounded-full h-1.5 overflow-hidden">
-              <div
-                className={`h-full rounded-full ${result.canCoverFullRent ? "bg-green-500" : "bg-yellow-500"}`}
-                style={{ width: `${Math.min(100, result.coveragePercent)}%` }}
-              />
-            </div>
-            <span className="text-xs text-gray-400">{Math.round(result.coveragePercent)}%</span>
-          </div>
-        </div>
-
-        {/* Share button - Compact */}
+        {/* 3. SHARE THIRD */}
         <button
           onClick={handleShare}
-          className="w-full py-2 rounded-lg border border-zinc-700 bg-zinc-800 hover:bg-zinc-700 transition-colors text-gray-300 text-sm"
+          className="w-full py-2 rounded-lg border border-zinc-700 bg-zinc-800 active:bg-zinc-700 text-gray-300 text-sm"
         >
-          {copied ? "Link copied!" : "Share"}
+          {copied ? "Copied!" : "Share"}
         </button>
       </div>
 
