@@ -24,18 +24,20 @@ const formatWithCommas = (value: number): string => {
   return value.toLocaleString();
 };
 
-// Parse comma-formatted string to number
-const parseFromCommas = (value: string): number => {
-  return parseInt(value.replace(/,/g, "")) || 0;
-};
-
 export function Calculator() {
   const [inputs, setInputs] = useState<UserInputs>(DEFAULT_INPUTS);
   const [activeSlider, setActiveSlider] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [rentInputValue, setRentInputValue] = useState(formatWithCommas(DEFAULT_INPUTS.rent));
+  const [showBreakdown, setShowBreakdown] = useState(false);
 
   const result = useMemo(() => calculateBiltValue(inputs), [inputs]);
+
+  // Calculate breakdown values
+  const grossValue = Math.round(result.blue.annualPoints * 0.015); // Points value before fees
+  const rentFee = Math.round(inputs.rent * 0.03 * 12); // Annual 3% fee
+  const feeOffset = result.canCoverFullRent ? rentFee : Math.round(result.biltCashEarned * 12); // How much Bilt Cash covers
+  const netValue = result.blue.netAnnualValue;
 
   const updateInput = (key: keyof UserInputs) => (value: number) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
@@ -43,7 +45,6 @@ export function Calculator() {
 
   const handleRentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/,/g, "");
-    // Only allow digits
     if (/^\d*$/.test(rawValue)) {
       const numValue = parseInt(rawValue) || 0;
       setRentInputValue(rawValue ? formatWithCommas(numValue) : "");
@@ -52,7 +53,6 @@ export function Calculator() {
   };
 
   const handleRentBlur = () => {
-    // Re-format on blur
     setRentInputValue(inputs.rent ? formatWithCommas(inputs.rent) : "");
   };
 
@@ -73,16 +73,15 @@ export function Calculator() {
     }
   };
 
-  // Determine slider style based on coverage state
   const sliderClassName = `flex-1 h-2 rounded-lg appearance-none cursor-pointer slider-track ${
     result.canCoverFullRent ? "" : "warning"
   }`;
 
   return (
     <section className="px-4 pb-4 lg:px-4 lg:pb-4 max-w-5xl mx-auto flex-1 flex flex-col lg:block">
-      {/* MOBILE LAYOUT: Full screen design */}
+      {/* MOBILE LAYOUT */}
       <div className="lg:hidden flex flex-col flex-1">
-        {/* Rent Input - Fintech underline style */}
+        {/* Rent Input */}
         <div className="mb-6">
           <label className="block text-gray-500 text-xs uppercase tracking-widest mb-2">Monthly Rent</label>
           <div className="flex items-baseline border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
@@ -99,7 +98,7 @@ export function Calculator() {
           </div>
         </div>
 
-        {/* Card Spending - Sliders with header */}
+        {/* Card Spending - Sliders */}
         <div className="flex-1">
           <label className="block text-gray-500 text-xs uppercase tracking-wide mb-4">Monthly Card Spend</label>
           <div className="space-y-5">
@@ -130,24 +129,49 @@ export function Calculator() {
           </div>
         </div>
 
-        {/* Results Card - Hierarchy inverted: Value first */}
+        {/* Results Card */}
         <div className={`rounded-xl p-5 mt-6 ${
-          result.canCoverFullRent
-            ? "bg-green-600"
-            : "bg-amber-600"
+          result.canCoverFullRent ? "bg-green-600" : "bg-amber-600"
         }`}>
-          {/* Value is the hero stat */}
           <div className="text-center mb-3">
-            <div className="text-white/70 text-xs uppercase tracking-wide mb-1">Estimated Annual Value</div>
+            <div className="text-white/70 text-xs uppercase tracking-wide mb-1">Net Value (After Fees)</div>
             <div className="text-white text-5xl font-bold tabular-nums">~${result.blue.netAnnualValue}</div>
             <div className="text-white/70 text-sm mt-1 tabular-nums">{result.blue.annualPoints.toLocaleString()} pts/year</div>
+            <button
+              onClick={() => setShowBreakdown(!showBreakdown)}
+              className="text-white/60 text-xs underline mt-2 hover:text-white/80"
+            >
+              {showBreakdown ? "Hide Breakdown" : "See Breakdown"}
+            </button>
           </div>
 
-          {/* Rent Coverage with contextual color and win state */}
+          {/* Breakdown */}
+          {showBreakdown && (
+            <div className="bg-black/20 rounded-lg p-3 mb-3 text-sm">
+              <div className="flex justify-between text-white/70">
+                <span>Gross Value:</span>
+                <span className="tabular-nums">${grossValue}</span>
+              </div>
+              <div className="flex justify-between text-red-200">
+                <span>Rent Fee (3%):</span>
+                <span className="tabular-nums">-${rentFee}</span>
+              </div>
+              <div className="flex justify-between text-green-200">
+                <span>Fee Offset:</span>
+                <span className="tabular-nums">+${feeOffset}</span>
+              </div>
+              <div className="flex justify-between text-white font-bold border-t border-white/20 pt-2 mt-2">
+                <span>Net Value:</span>
+                <span className="tabular-nums">${netValue}</span>
+              </div>
+            </div>
+          )}
+
+          {/* Coverage status */}
           <div className="text-center pt-3 border-t border-white/20">
             {result.canCoverFullRent ? (
               <div className="text-white text-lg font-bold">
-                ✓ You&apos;re fully covered!
+                ✓ 3% Fee Eliminated
               </div>
             ) : (
               <>
@@ -165,7 +189,7 @@ export function Calculator() {
           </div>
         </div>
 
-        {/* Share Button - Visible with white border */}
+        {/* Share Button */}
         <button
           onClick={handleShare}
           className="w-full py-3 rounded-xl border border-white/30 bg-white/5 hover:bg-white/15 active:bg-white/20 text-gray-100 text-sm font-medium mt-4 transition-colors"
@@ -174,13 +198,14 @@ export function Calculator() {
         </button>
       </div>
 
-      {/* DESKTOP LAYOUT: Side-by-side */}
+      {/* DESKTOP LAYOUT */}
       <div className="hidden lg:grid lg:grid-cols-2 gap-6 items-start">
         {/* LEFT: Inputs */}
         <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800">
           <h2 className="text-lg font-semibold mb-4">Your Numbers</h2>
-          <div className="space-y-4">
-            <div>
+          <div className="space-y-6">
+            {/* Rent Input - Constrained width */}
+            <div className="max-w-[300px]">
               <label className="block text-gray-500 text-xs uppercase tracking-widest mb-2">Monthly Rent</label>
               <div className="flex items-baseline border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
                 <span className="text-gray-500 text-xl mr-1" style={{ transform: 'translateY(2px)' }}>$</span>
@@ -195,21 +220,34 @@ export function Calculator() {
               </div>
             </div>
 
+            {/* Card Spending - Sliders (like mobile) */}
             <div className="border-t border-zinc-700 pt-4">
               <p className="text-gray-500 text-xs uppercase tracking-wide mb-4">Monthly Card Spend</p>
-              <div className="grid grid-cols-2 gap-3">
-                {(["dining", "groceries", "travel", "other"] as const).map((key) => (
-                  <div key={key}>
-                    <label className="block text-gray-400 text-sm mb-1 capitalize">{key}</label>
-                    <div className="relative">
+              <div className="space-y-4">
+                {SPENDING_CATEGORIES.map((category) => (
+                  <div key={category.key} className="flex items-center gap-4">
+                    <span className="text-lg w-6">{category.icon}</span>
+                    <span className="text-gray-300 text-sm w-24">{category.label}</span>
+                    <input
+                      type="range"
+                      min="0"
+                      max={category.max}
+                      step="50"
+                      value={inputs[category.key]}
+                      onChange={(e) => updateInput(category.key)(parseInt(e.target.value))}
+                      onMouseDown={() => setActiveSlider(category.key)}
+                      onMouseUp={() => setActiveSlider(null)}
+                      className={sliderClassName}
+                    />
+                    <div className="relative w-20">
                       <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
                       <input
                         type="number"
                         min="0"
-                        step="100"
-                        value={inputs[key] || ""}
-                        onChange={(e) => updateInput(key)(Math.max(0, parseInt(e.target.value) || 0))}
-                        className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-2 pl-6 text-white text-sm focus:outline-none focus:border-green-500 tabular-nums"
+                        step="50"
+                        value={inputs[category.key] || ""}
+                        onChange={(e) => updateInput(category.key)(Math.max(0, parseInt(e.target.value) || 0))}
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 pl-5 text-white text-sm focus:outline-none focus:border-green-500 tabular-nums"
                       />
                     </div>
                   </div>
@@ -226,19 +264,46 @@ export function Calculator() {
               ? "bg-green-900/30 border-2 border-green-500/50"
               : "bg-amber-900/20 border-2 border-amber-500/50"
           }`}>
-            {/* Value hero */}
-            <div className="text-gray-400 text-sm uppercase tracking-wide mb-2">Estimated Annual Value</div>
+            <div className="text-gray-400 text-sm uppercase tracking-wide mb-2">Net Value (After Fees)</div>
             <div className={`text-6xl font-bold mb-2 tabular-nums ${
               result.canCoverFullRent ? "text-green-400" : "text-amber-400"
             }`}>
               ~${result.blue.netAnnualValue}
             </div>
-            <div className="text-gray-400 text-lg mb-4 tabular-nums">
+            <div className="text-gray-400 text-lg mb-2 tabular-nums">
               {result.blue.annualPoints.toLocaleString()} pts/year
             </div>
+            <button
+              onClick={() => setShowBreakdown(!showBreakdown)}
+              className="text-gray-500 text-xs underline hover:text-gray-300"
+            >
+              {showBreakdown ? "Hide Breakdown" : "See Breakdown"}
+            </button>
 
-            {/* Coverage status with win state */}
-            <div className={`text-lg ${
+            {/* Breakdown */}
+            {showBreakdown && (
+              <div className="bg-black/20 rounded-lg p-4 mt-4 text-sm text-left">
+                <div className="flex justify-between text-gray-400">
+                  <span>Gross Value:</span>
+                  <span className="tabular-nums">${grossValue}</span>
+                </div>
+                <div className="flex justify-between text-red-400">
+                  <span>Rent Fee (3%):</span>
+                  <span className="tabular-nums">-${rentFee}</span>
+                </div>
+                <div className="flex justify-between text-green-400">
+                  <span>Fee Offset:</span>
+                  <span className="tabular-nums">+${feeOffset}</span>
+                </div>
+                <div className="flex justify-between text-white font-bold border-t border-white/20 pt-2 mt-2">
+                  <span>Net Value:</span>
+                  <span className="tabular-nums">${netValue}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Coverage status */}
+            <div className={`text-lg mt-4 ${
               result.canCoverFullRent
                 ? "text-green-400"
                 : result.coveragePercent >= 50
@@ -246,7 +311,7 @@ export function Calculator() {
                   : "text-red-400"
             }`}>
               {result.canCoverFullRent ? (
-                "✓ You're fully covered!"
+                "✓ 3% Fee Eliminated"
               ) : (
                 <span className="tabular-nums">Need ${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()}/mo more spending</span>
               )}
