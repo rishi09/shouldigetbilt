@@ -15,6 +15,7 @@ const DEFAULT_INPUTS: UserInputs = {
 
 export function Calculator() {
   const [inputs, setInputs] = useState<UserInputs>(DEFAULT_INPUTS);
+  const [copied, setCopied] = useState(false);
 
   const result = useMemo(() => calculateBiltValue(inputs), [inputs]);
 
@@ -22,51 +23,30 @@ export function Calculator() {
     setInputs((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+      const input = document.createElement("input");
+      input.value = window.location.href;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <section className="py-6 px-4 max-w-5xl mx-auto">
-      {/* Side-by-side layout: Inputs on left, Answer on right */}
+      {/* Side-by-side on desktop, reversed on mobile (answer first) */}
       <div className="grid lg:grid-cols-2 gap-6 items-start">
-        {/* LEFT: Inputs */}
-        <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800">
-          <h2 className="text-lg font-semibold mb-4">Your Numbers</h2>
-
-          <div className="space-y-4">
-            <SpendingInput
-              label="Monthly Rent"
-              value={inputs.rent}
-              onChange={updateInput("rent")}
-            />
-
-            <div className="border-t border-zinc-700 pt-4">
-              <p className="text-gray-500 text-sm mb-3">Monthly card spending:</p>
-              <div className="grid grid-cols-2 gap-3">
-                <SpendingInput
-                  label="Dining"
-                  value={inputs.dining}
-                  onChange={updateInput("dining")}
-                />
-                <SpendingInput
-                  label="Groceries"
-                  value={inputs.groceries}
-                  onChange={updateInput("groceries")}
-                />
-                <SpendingInput
-                  label="Travel"
-                  value={inputs.travel}
-                  onChange={updateInput("travel")}
-                />
-                <SpendingInput
-                  label="Other"
-                  value={inputs.other}
-                  onChange={updateInput("other")}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* RIGHT: The Answer */}
-        <div className="space-y-4">
+        {/* Mobile: Answer first (order-1), Desktop: second (lg:order-2) */}
+        <div className="space-y-4 order-1 lg:order-2">
           {/* YES/NO Card */}
           <div className={`rounded-xl p-8 text-center ${
             result.canCoverFullRent
@@ -123,6 +103,53 @@ export function Calculator() {
                     result.canCoverFullRent ? "bg-green-500" : "bg-yellow-500"
                   }`}
                   style={{ width: `${Math.min(100, result.coveragePercent)}%` }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Share button */}
+          <button
+            onClick={handleShare}
+            className="w-full py-3 px-4 rounded-lg border border-zinc-700 bg-zinc-800 hover:bg-zinc-700 transition-colors text-gray-300 text-sm font-medium"
+          >
+            {copied ? "Link copied!" : "Share this calculator"}
+          </button>
+        </div>
+
+        {/* Mobile: Inputs second (order-2), Desktop: first (lg:order-1) */}
+        <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800 order-2 lg:order-1">
+          <h2 className="text-lg font-semibold mb-4">Your Numbers</h2>
+
+          <div className="space-y-4">
+            <SpendingInput
+              label="Monthly Rent"
+              value={inputs.rent}
+              onChange={updateInput("rent")}
+            />
+
+            <div className="border-t border-zinc-700 pt-4">
+              <p className="text-gray-500 text-sm mb-3">Monthly card spending:</p>
+              <div className="grid grid-cols-2 gap-3">
+                <SpendingInput
+                  label="Dining"
+                  value={inputs.dining}
+                  onChange={updateInput("dining")}
+                />
+                <SpendingInput
+                  label="Groceries"
+                  value={inputs.groceries}
+                  onChange={updateInput("groceries")}
+                />
+                <SpendingInput
+                  label="Travel"
+                  value={inputs.travel}
+                  onChange={updateInput("travel")}
+                />
+                <SpendingInput
+                  label="Other"
+                  value={inputs.other}
+                  onChange={updateInput("other")}
                 />
               </div>
             </div>

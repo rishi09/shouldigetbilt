@@ -12,11 +12,10 @@ export function Explainer() {
       <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800 mb-6">
         <h3 className="font-semibold text-lg mb-4 text-center">The New Rule</h3>
 
-        <div className="space-y-4 text-center">
+        <div className="space-y-3 text-center">
           <p className="text-gray-300">
-            To earn full points on your rent (no fees), you need to earn{" "}
-            <span className="text-yellow-400 font-semibold">3% of your rent</span>{" "}
-            in &quot;Bilt Cash.&quot;
+            To earn full points on your rent (no fees), you need{" "}
+            <span className="text-yellow-400 font-semibold">&quot;Bilt Cash.&quot;</span>
           </p>
 
           <p className="text-gray-300">
@@ -25,14 +24,9 @@ export function Explainer() {
             of everything you spend on the card.
           </p>
 
-          <div className="border-t border-zinc-700 pt-4 mt-4">
-            <p className="text-white text-lg font-medium">
-              3% ÷ 4% = <span className="text-blue-400">75%</span>
-            </p>
-            <p className="text-gray-400 mt-2">
-              Spend <span className="text-white">75% of your rent</span> on the card → full rent points, no fees.
-            </p>
-          </div>
+          <p className="text-gray-400 text-sm">
+            Here&apos;s how much you need to spend:
+          </p>
         </div>
       </div>
 
@@ -74,16 +68,18 @@ export function Explainer() {
         </div>
       </div>
 
-      {/* What if you don't hit it */}
-      <div className="bg-zinc-900 rounded-lg p-6 border border-orange-900/50">
+      {/* Why bother */}
+      <div className="bg-zinc-900 rounded-lg p-6 border border-green-900/50">
         <div className="flex items-start gap-3">
-          <span className="text-orange-500 text-xl">⚠</span>
+          <span className="text-green-500 text-xl">✓</span>
           <div>
-            <h3 className="font-semibold text-lg mb-2">What if you don&apos;t spend enough?</h3>
+            <h3 className="font-semibold text-lg mb-2">Why bother?</h3>
             <p className="text-gray-400">
-              You can still earn rent points, but you&apos;ll pay a{" "}
-              <span className="text-orange-400 font-medium">3% transaction fee</span>{" "}
-              — which basically wipes out the value.
+              Most credit cards give you{" "}
+              <span className="text-gray-300 font-medium">0 points on rent</span>.
+              If you hit the threshold, Bilt gives you{" "}
+              <span className="text-green-400 font-medium">1 point per dollar</span>{" "}
+              — that&apos;s real value on your biggest monthly expense.
             </p>
           </div>
         </div>
