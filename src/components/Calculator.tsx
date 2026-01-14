@@ -71,13 +71,13 @@ export function Calculator() {
 
       {/* Coverage Indicator */}
       <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800 mb-8">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-gray-400">Rent Coverage</span>
+        <div className="flex justify-between items-center mb-3">
+          <span className="text-gray-400">Rent Points Coverage</span>
           <span className={`font-bold ${result.canCoverFullRent ? "text-green-400" : "text-yellow-400"}`}>
             {Math.round(result.coveragePercent)}%
           </span>
         </div>
-        <div className="w-full bg-zinc-700 rounded-full h-3 overflow-hidden">
+        <div className="w-full bg-zinc-700 rounded-full h-3 overflow-hidden mb-4">
           <div
             className={`h-full rounded-full transition-all duration-300 ${
               result.canCoverFullRent ? "bg-green-500" : "bg-yellow-500"
@@ -85,36 +85,25 @@ export function Calculator() {
             style={{ width: `${Math.min(100, result.coveragePercent)}%` }}
           />
         </div>
-        <p className="text-sm text-gray-500 mt-2">
-          {result.canCoverFullRent ? (
-            <span className="text-green-400">
-              You&apos;re earning full rent points fee-free.
-            </span>
-          ) : (
-            <>
-              Spend{" "}
-              <span className="text-white">
-                ${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()}
-              </span>{" "}
-              more per month for full coverage.
-            </>
-          )}
-        </p>
 
-        {/* Bilt Cash breakdown */}
-        <div className="mt-4 pt-4 border-t border-zinc-700 grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <div className="text-gray-500">Bilt Cash Earned</div>
-            <div className="text-yellow-400 font-medium">
-              ${result.biltCashEarned.toFixed(2)}/mo
-            </div>
-          </div>
-          <div>
-            <div className="text-gray-500">Bilt Cash Needed</div>
-            <div className="text-white font-medium">
-              ${result.biltCashNeeded.toFixed(2)}/mo
-            </div>
-          </div>
+        {/* Simple explanation */}
+        <div className="space-y-2 text-sm">
+          <p className="text-gray-300">
+            To unlock full points on your{" "}
+            <span className="text-white font-medium">${inputs.rent.toLocaleString()}</span> rent,
+            you need{" "}
+            <span className="text-yellow-400 font-medium">${result.biltCashNeeded.toFixed(0)} in Bilt Cash</span>,
+            earned by spending{" "}
+            <span className="text-white font-medium">${Math.round(result.spendingNeededFor100).toLocaleString()}</span> on the card.
+          </p>
+
+          <p className={result.canCoverFullRent ? "text-green-400" : "text-gray-400"}>
+            {result.canCoverFullRent ? (
+              <>You&apos;re spending <span className="font-medium">${result.totalSpending.toLocaleString()}</span> — you&apos;re covered.</>
+            ) : (
+              <>You&apos;re spending <span className="text-white font-medium">${result.totalSpending.toLocaleString()}</span> — you need <span className="text-yellow-400 font-medium">${Math.round(result.spendingNeededFor100 - result.totalSpending).toLocaleString()} more</span>.</>
+            )}
+          </p>
         </div>
       </div>
 
