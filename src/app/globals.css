@@ -13,16 +13,18 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Custom slider styling */
+/* Custom slider styling - FORCE visibility */
 .slider-track {
   -webkit-appearance: none;
   appearance: none;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.25) !important;
+  height: 8px;
+  border-radius: 9999px;
 }
 
 /* Webkit (Chrome, Safari, Edge) */
 .slider-track::-webkit-slider-runnable-track {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.25);
   border-radius: 9999px;
   height: 8px;
 }
@@ -30,38 +32,46 @@ body {
 .slider-track::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  height: 20px;
-  width: 20px;
+  height: 22px;
+  width: 22px;
   border-radius: 50%;
   background: white;
-  margin-top: -6px;
+  margin-top: -7px;
   cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   transition: background-color 0.2s ease;
 }
 
 /* Warning state - orange thumb */
 .slider-track.warning::-webkit-slider-thumb {
-  background: #f59e0b; /* amber-500 */
+  background: #f59e0b;
 }
 
 /* Firefox */
 .slider-track::-moz-range-track {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.25);
   border-radius: 9999px;
   height: 8px;
 }
 
 .slider-track::-moz-range-thumb {
-  height: 20px;
-  width: 20px;
+  height: 22px;
+  width: 22px;
   border-radius: 50%;
   background: white;
   border: none;
   cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   transition: background-color 0.2s ease;
 }
 
 /* Warning state - orange thumb (Firefox) */
 .slider-track.warning::-moz-range-thumb {
-  background: #f59e0b; /* amber-500 */
+  background: #f59e0b;
+}
+
+/* iOS Safari slider fixes */
+.slider-track::-webkit-slider-container {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 9999px;
 }

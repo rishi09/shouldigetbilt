@@ -56,25 +56,25 @@ export function Explainer() {
               </tr>
             </thead>
             <tbody className="text-gray-300">
-              <tr className="bg-zinc-800/50">
-                <td className="py-3 rounded-l">$1,500</td>
+              <tr className="bg-white/5">
+                <td className="py-3 pl-2 rounded-l">$1,500</td>
                 <td className="py-3 text-right text-yellow-400">$45</td>
-                <td className="py-3 text-right text-white font-medium rounded-r">$1,125/mo</td>
+                <td className="py-3 text-right text-white font-medium pr-2 rounded-r">$1,125/mo</td>
               </tr>
               <tr className="bg-transparent">
-                <td className="py-3">$2,000</td>
+                <td className="py-3 pl-2">$2,000</td>
                 <td className="py-3 text-right text-yellow-400">$60</td>
-                <td className="py-3 text-right text-white font-medium">$1,500/mo</td>
+                <td className="py-3 text-right text-white font-medium pr-2">$1,500/mo</td>
               </tr>
-              <tr className="bg-zinc-800/50">
-                <td className="py-3 rounded-l">$2,500</td>
+              <tr className="bg-white/5">
+                <td className="py-3 pl-2 rounded-l">$2,500</td>
                 <td className="py-3 text-right text-yellow-400">$75</td>
-                <td className="py-3 text-right text-white font-medium rounded-r">$1,875/mo</td>
+                <td className="py-3 text-right text-white font-medium pr-2 rounded-r">$1,875/mo</td>
               </tr>
               <tr className="bg-transparent">
-                <td className="py-3">$3,000</td>
+                <td className="py-3 pl-2">$3,000</td>
                 <td className="py-3 text-right text-yellow-400">$90</td>
-                <td className="py-3 text-right text-white font-medium">$2,250/mo</td>
+                <td className="py-3 text-right text-white font-medium pr-2">$2,250/mo</td>
               </tr>
             </tbody>
           </table>

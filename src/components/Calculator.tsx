@@ -59,15 +59,15 @@ export function Calculator() {
         {/* Rent Input - Fintech underline style */}
         <div className="mb-6">
           <label className="block text-gray-500 text-xs uppercase tracking-wide mb-2">Monthly Rent</label>
-          <div className="flex items-baseline border-b-2 border-gray-600 pb-2 focus-within:border-green-500 transition-colors">
-            <span className="text-gray-500 text-2xl mr-1">$</span>
+          <div className="flex items-end border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
+            <span className="text-gray-500 text-2xl mr-1 mb-1">$</span>
             <input
               type="number"
               min="0"
               step="100"
               value={inputs.rent || ""}
               onChange={(e) => updateInput("rent")(Math.max(0, parseInt(e.target.value) || 0))}
-              className="flex-1 bg-transparent text-white text-4xl font-bold focus:outline-none tabular-nums"
+              className="flex-1 bg-transparent text-white text-4xl font-bold focus:outline-none tabular-nums leading-none"
               style={{ width: "100%" }}
             />
           </div>
@@ -139,10 +139,10 @@ export function Calculator() {
           </div>
         </div>
 
-        {/* Share Button - Visible ghost style */}
+        {/* Share Button - Visible with white border */}
         <button
           onClick={handleShare}
-          className="w-full py-3 rounded-xl border border-gray-500 bg-white/5 hover:bg-white/10 active:bg-white/15 text-gray-200 text-sm font-medium mt-4 transition-colors"
+          className="w-full py-3 rounded-xl border border-white/30 bg-white/5 hover:bg-white/15 active:bg-white/20 text-gray-100 text-sm font-medium mt-4 transition-colors"
         >
           {copied ? "Link Copied!" : "Share Calculator"}
         </button>
@@ -156,15 +156,15 @@ export function Calculator() {
           <div className="space-y-4">
             <div>
               <label className="block text-gray-500 text-xs uppercase tracking-wide mb-2">Monthly Rent</label>
-              <div className="flex items-baseline border-b-2 border-gray-600 pb-2 focus-within:border-green-500 transition-colors">
-                <span className="text-gray-500 text-xl mr-1">$</span>
+              <div className="flex items-end border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
+                <span className="text-gray-500 text-xl mr-1 mb-1">$</span>
                 <input
                   type="number"
                   min="0"
                   step="100"
                   value={inputs.rent || ""}
                   onChange={(e) => updateInput("rent")(Math.max(0, parseInt(e.target.value) || 0))}
-                  className="flex-1 bg-transparent text-white text-3xl font-bold focus:outline-none tabular-nums"
+                  className="flex-1 bg-transparent text-white text-3xl font-bold focus:outline-none tabular-nums leading-none"
                 />
               </div>
             </div>
@@ -264,7 +264,7 @@ export function Calculator() {
 
           <button
             onClick={handleShare}
-            className="w-full py-3 rounded-lg border border-zinc-500 bg-white/5 hover:bg-white/10 transition-colors text-gray-200 text-sm font-medium"
+            className="w-full py-3 rounded-lg border border-white/30 bg-white/5 hover:bg-white/15 transition-colors text-gray-100 text-sm font-medium"
           >
             {copied ? "Link Copied!" : "Share Calculator"}
           </button>
