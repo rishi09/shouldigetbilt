@@ -58,9 +58,9 @@ export function Calculator() {
       <div className="lg:hidden flex flex-col flex-1">
         {/* Rent Input - Fintech underline style */}
         <div className="mb-6">
-          <label className="block text-gray-500 text-xs uppercase tracking-wide mb-2">Monthly Rent</label>
-          <div className="flex items-end border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
-            <span className="text-gray-500 text-2xl mr-1 mb-1">$</span>
+          <label className="block text-gray-500 text-xs uppercase tracking-wide mb-3">Monthly Rent</label>
+          <div className="flex items-baseline border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
+            <span className="text-gray-500 text-2xl mr-1" style={{ transform: 'translateY(2px)' }}>$</span>
             <input
               type="number"
               min="0"
@@ -155,9 +155,9 @@ export function Calculator() {
           <h2 className="text-lg font-semibold mb-4">Your Numbers</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-gray-500 text-xs uppercase tracking-wide mb-2">Monthly Rent</label>
-              <div className="flex items-end border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
-                <span className="text-gray-500 text-xl mr-1 mb-1">$</span>
+              <label className="block text-gray-500 text-xs uppercase tracking-wide mb-3">Monthly Rent</label>
+              <div className="flex items-baseline border-b-2 border-gray-600 pb-1 focus-within:border-green-500 transition-colors">
+                <span className="text-gray-500 text-xl mr-1" style={{ transform: 'translateY(2px)' }}>$</span>
                 <input
                   type="number"
                   min="0"
